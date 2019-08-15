@@ -1,0 +1,29 @@
+#!/bin/bash
+
+clear
+toilet -f wideterm --gay "Changing hosts..."
+sleep 0.5
+tsudo hostc
+sleep 0.5
+echo
+toilet -f wideterm --gay "Starting Game Gaurdian..."
+sleep 0.5
+am start -n com.zrmzgc.xjv/com.zrmzgc.xjv.MainActivity
+sleep 2
+su -c "input tap 975 1836"
+sleep 0.5
+echo
+toilet -f wideterm --gay "Starting PUBG..."
+tsudo pm enable com.tencent.ig
+am start -n com.tencent.ig/com.epicgames.ue4.SplashActivity
+echo
+read -p "Press enter to revert hosts..."
+echo
+toilet -f wideterm --gay "Reverting hosts..."
+tsudo hostc
+tsudo pm disable com.tencent.ig
+tsudo pkill com.zrmzgc.xjv
+echo
+toilet -f wideterm --gay "DONE"
+sleep 1
+clear

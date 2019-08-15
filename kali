@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#Colour Output
+RED="\033[01;31m"
+GREEN="\033[01;32m"                                    YELLOW="\033[01;33m"
+BLUE="\033[01;34m"
+BOLD="\033[01;01m"                                     RESET="\033[00m"
+
+LD="/data/data/ru.meefik.linuxdeploy/files/bin/linuxdeploy"
+clear
+echo
+toilet --metal -f wideterm "    K A L I"
+
+if [[ ${UID} -eq 0 ]]
+then
+	if [[ "$1" == "start" ]]
+	then 
+		$LD start -m
+
+	elif [[ "$1" == "stop" ]]
+	then
+		$LD stop -u
+	else
+		echo -e "${GREEN}USES:${RESET}"
+		echo -e "${YELLOW}	${0##*/} start : Start KALI${RESET}"
+		echo -e "${YELLOW}	${0##*/} stop  : Stop KALI${RESET}"
+	fi
+else
+	echo -e "${RED}Try as root${RESET}"
+fi
+

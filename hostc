@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [[ ${UID} -eq 0 ]]
+then
+
+	mount -o rw,remount /system
+	cd /etc/
+
+	if [ -f hosts_o ]
+	then
+		mv hosts hosts_b
+		mv hosts_o hosts
+	else
+		mv hosts hosts_o
+		mv hosts_b hosts
+	fi
+	mount -o ro,remount /system
+else
+	echo "Try as root"
+fi

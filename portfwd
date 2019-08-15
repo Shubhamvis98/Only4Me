@@ -1,0 +1,30 @@
+#!/data/data/com.termux/files/usr/bin/bash
+#Colour Output
+RED="\033[01;31m"
+GREEN="\033[01;32m"
+YELLOW="\033[01;33m"
+BLUE="\033[01;34m"
+BOLD="\033[01;01m"
+RESET="\033[00m"
+clear
+echo
+toilet --gay -f wideterm " P o r t F o r w a r d e r"
+echo
+if [[ -z "$2" ]]
+then
+	echo -e ${BLUE}USES:${RESET}
+	echo -e ${RED}portfwd${RESET} ${YELLOW}subdomain:port local_port${RESET}
+	echo -e "${BLUE}          OR${RESET}"
+	echo -e ${RED}portfwd${RESET} ${YELLOW}port local_port${RESET}
+	echo 
+	echo -e ${YELLOW}subdomain:port${RESET} is server subdomain and port to listen
+	echo -e ${YELLOW}local_port${RESET} is the port to forward
+	echo -e ${BOLD}YOU CAN SKIP SUBDOMAIN${RESET}
+	echo -e ${BLUE}autossh must be installed${RESET}
+	echo
+else
+	echo -e ${YELLOW}FORWARDED PORT: ${RESET}$2
+	echo -e ${YELLOW}FORWARDING ON: ${RESET}$1
+	echo
+	autossh -M 0 -R $1:localhost:$2 serveo.net
+fi
