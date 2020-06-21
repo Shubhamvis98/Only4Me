@@ -2,9 +2,11 @@
 
 #Colour Output
 RED="\033[01;31m"
-GREEN="\033[01;32m"                                    YELLOW="\033[01;33m"
+GREEN="\033[01;32m"
+YELLOW="\033[01;33m"
 BLUE="\033[01;34m"
-BOLD="\033[01;01m"                                     RESET="\033[00m"
+BOLD="\033[01;01m"
+RESET="\033[00m"
 
 LD="/data/data/ru.meefik.linuxdeploy/files/bin/linuxdeploy"
 clear
