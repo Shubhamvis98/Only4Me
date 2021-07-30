@@ -5,7 +5,6 @@ com.textra
 com.adobe.scan.android
 com.iudesk.android.photo.editor
 homeworkout.homeworkouts.noequipment
-com.termux
 '''
 
 cat << 'EOF'
