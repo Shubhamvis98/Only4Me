@@ -1,0 +1,10 @@
+#!/bin/bash
+
+TMP=`mktemp -d`
+ZIP='https://github.com/Shubhamvis98/nethunter-pinephone/archive/refs/heads/master.zip'
+
+cd $TMP
+curl -L $ZIP > nh.zip
+unzip nh.zip
+cd nethunter-*
+sudo ./install.sh
