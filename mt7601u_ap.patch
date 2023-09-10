@@ -1,0 +1,43 @@
+--- a/init.c	2023-08-28 03:19:51.000000000 +0530
++++ b/init.c	2023-09-11 02:59:39.963973897 +0530
+@@ -608,8 +608,9 @@
+ 
+ 	SET_IEEE80211_PERM_ADDR(hw, dev->macaddr);
+ 
+-	wiphy->features |= NL80211_FEATURE_ACTIVE_MONITOR;
+-	wiphy->interface_modes = BIT(NL80211_IFTYPE_STATION);
++	wiphy->features |= NL80211_FEATURE_ACTIVE_MONITOR | NL80211_FEATURE_AP_SCAN;
++	wiphy->interface_modes = BIT(NL80211_IFTYPE_STATION) | BIT(NL80211_IFTYPE_AP) | BIT(NL80211_IFTYPE_MONITOR);
++	wiphy->software_iftypes = BIT(NL80211_IFTYPE_STATION) | BIT(NL80211_IFTYPE_AP) | BIT(NL80211_IFTYPE_MONITOR);
+ 	wiphy->flags |= WIPHY_FLAG_SUPPORTS_TDLS;
+ 
+ 	wiphy_ext_feature_set(wiphy, NL80211_EXT_FEATURE_CQM_RSSI_LIST);
+--- a/Makefile	1970-01-01 05:30:00.000000000 +0530
++++ b/Makefile	2023-09-11 02:54:14.499081672 +0530
+@@ -0,0 +1,26 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++KVER ?= $(shell uname -r)
++
++obj-$(CONFIG_MT7601U)	+= mt7601u.o
++
++mt7601u-objs	= \
++	usb.o init.o main.o mcu.o trace.o dma.o core.o eeprom.o phy.o \
++	mac.o util.o debugfs.o tx.o
++
++MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
++
++MODULE_NAME := mt7601u
++
++CFLAGS_trace.o := -I$(src)
++
++all:
++	make -C /lib/modules/$(KVER)/build M=$(PWD) modules
++ 
++clean:
++	make -C /lib/modules/$(KVER)/build M=$(PWD) clean
++
++install:
++	mkdir -p -m 644 $(MODDESTDIR)mediatek/mt7601u
++	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)mediatek/mt7601u/
++	/sbin/depmod -a ${KVER}
