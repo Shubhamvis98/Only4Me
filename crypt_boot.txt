@@ -1,0 +1,35 @@
+#!/bin/bash
+
+apt install -y cryptsetup cryptsetup-initramfs osk-sdl
+
+/etc/fstab:
+/dev/mapper/calamares_crypt	/	ext4	defaults,x-systemd.growfs	0	1
+
+/etc/crypttab: the uuid is for mmcblk not encrypted block
+calamares_crypt UUID=eb3f495c-1b4d-4c12-aeb7-1a554739f6a4 none luks,keyscript=/usr/share/initramfs-tools/scripts/osk-sdl-keyscript
+
+
+ROOT=/mnt/root
+RBLK=mapper/calamares_crypt
+BBLK=mmcblk0p1
+cryptsetup luksOpen /dev/mmcblk0p2 calamares_crypt
+mount /dev/$RBLK $ROOT
+mkdir -p $ROOT/boot
+mount /dev/$BBLK $ROOT/boot
+mount -B /dev $ROOT/dev
+mount -B /dev/pts $ROOT/dev/pts
+mount -B /proc $ROOT/proc
+mount -B /sys $ROOT/sys
+
+umount $ROOT/{boot,sys,proc,dev/pts,dev} $ROOT
+
+# Installer setup
+debootstrap --variant=minbase bookworm http://deb.debian.org/debian
+apt install -y calamares-settings-mobian osk-sdl pinephone-support
+systemctl enable calamares-settings-mobian
+systemctl disable eg25-manager
+
+sed -i 's/Mobian/Kali/g' ${ROOTFS}/etc/calamares/modules/mobile.conf
+sed -i 's/username: "mobian"/username: "kali"/g' ${ROOTFS}/etc/calamares/modules/mobile.conf
+sed -i 's/Bookworm//g' ${ROOTFS}/etc/calamares/modules/mobile.conf
+cat /home/jack/logo.png ${ROOTFS}/usr/share/calamares/branding/default-mobile/logo.png
