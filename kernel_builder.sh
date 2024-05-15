@@ -1,3 +1,4 @@
+#!/bin/bash
 
 cat <<'eof' | docker build -t kernelbuilder:latest -
 FROM debian
