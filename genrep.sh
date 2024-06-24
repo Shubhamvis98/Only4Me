@@ -6,15 +6,17 @@ case $1 in
 	init)
 		mkdir -p $repo_path/{conf,incoming}
 		cd $repo_path
-		echo -n 'Enter Codename: '; read codename
-		echo -n 'Enter Component: '; read component
-		echo -n 'Enter Arch: '; read arch
+		echo -n 'Enter Codename [eg. rolling]: '; read codename
+		echo -n 'Enter Component [eg. main]: '; read components
 		echo -n 'Enter Description: '; read desc
 		echo -n 'Enter SignWith: '; read sign
 cat <<eof> conf/distributions
+Origin: fossfrog
+Label: fossfrog
+Suite: stable
 Codename: $codename
-Components: $component
-Architectures: $arch
+Components: $components
+Architectures: amd64 arm64 i386 armhf
 Description: $desc
 SignWith: $sign
 eof
@@ -38,4 +40,3 @@ eof
 		echo -e "\tclean\t\t# Remove all repository files"
 		;;
 esac
-
