@@ -5,15 +5,14 @@ repo_path='put repo path here'
 case $1 in
 	init)
 		mkdir -p $repo_path/{conf,incoming}
-		cd $repo_path
 		echo -n 'Enter Codename [eg. rolling]: '; read codename
 		echo -n 'Enter Component [eg. main]: '; read components
 		echo -n 'Enter Description: '; read desc
 		echo -n 'Enter SignWith: '; read sign
-cat <<eof> conf/distributions
+cat <<eof> $repo_path/conf/distributions
 Origin: fossfrog
 Label: fossfrog
-Suite: stable
+Suite: fossfrog
 Codename: $codename
 Components: $components
 Architectures: amd64 arm64 i386 armhf
@@ -22,10 +21,9 @@ SignWith: $sign
 eof
 		;;
 	gen)
-		cd $repo_path
-		for pkg in incoming/*
+		for pkg in $repo_path/incoming/*
 		do
-			reprepro -b $repo_path includedeb rolling $pkg
+			reprepro -b $repo_path --outdir $repo_path/output includedeb rolling $pkg
 		done
 
 		chmod -R 755 $repo_path
