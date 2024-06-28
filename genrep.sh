@@ -1,6 +1,6 @@
 #!/bin/bash
 
-repo_path='put repo path here'
+repo_path='.'
 
 case $1 in
 	init)
