@@ -1,14 +1,16 @@
 #!/bin/bash
 
-cat <<'eof' | docker build -t kernelbuilder:latest -
-FROM debian
+cat <<'eof' | docker build -t kernel-builder:latest -
+FROM debian:latest
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt update
-RUN DEBIAN_FRONTEND=noninteractive apt upgrade -y
+RUN apt-get update && \
+    apt-get install -y zip unzip python3 python-is-python3 curl wget git rsync bison bc flex file vim pkgconf debhelper-compat kmod cpio libssl-dev libelf-dev build-essential crossbuild-essential-arm64 libncurses-dev && \
+    apt-get clean
+RUN echo 'echo -e "Kernel Builder by fossfrog\nTwitter: ShubhamVis98\nWeb: https://fossfrog.in\n"' >> /root/.bashrc
+RUN echo 'echo -e "Kernel Builder by fossfrog\nTwitter: ShubhamVis98\nWeb: https://fossfrog.in\n"' > /etc/motd
 
-RUN apt install -y wget bzip2 build-essential libncurses-dev cpio file git vim bsdextrautils kmod flex bison bc libelf-dev libssl-dev gcc-aarch64-linux-gnu zip python3 python-is-python3
+CMD ["bash", "-l"]
 
-CMD ["/bin/bash", "-l"]
 eof
