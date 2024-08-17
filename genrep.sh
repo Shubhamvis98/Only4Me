@@ -26,7 +26,7 @@ eof
 			reprepro -b $repo_path --outdir $repo_path/output includedeb rolling $pkg
 		done
 
-		chmod -R 755 $repo_path
+		chmod -R 755 $repo_path/output/dists $repo_path/output/pool
 		;;
 	clean)
 		rm -rvf $repo_path/{db,dists,pool}
