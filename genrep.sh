@@ -29,7 +29,7 @@ eof
 		chmod -R 755 $repo_path/output/dists $repo_path/output/pool
 		;;
 	clean)
-		rm -rvf $repo_path/{db,dists,pool}
+		rm -rvf $repo_path/{db,dists,pool,output/dists,output/pool}
 		;;
 	*)
 		echo -e "`basename $0` [option]"
