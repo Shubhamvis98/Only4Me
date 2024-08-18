@@ -1,8 +1,11 @@
 #!/bin/bash
 
-[ ! -d ramdisk/scripts/local-premount ] && echo '[!] Ramdisk extract not found' && exit
+RAMDISK=ramdisk/scripts/local-premount
+SCRIPT=$RAMDISK/losetup_root_img
 
-cat <<'eof'> ramdisk/scripts/local-premount/losetup_root_img
+[ ! -d "$RAMDISK" ] && echo '[!] Ramdisk extract not found' && exit
+
+cat <<'eof'> $SCRIPT
 #!/bin/sh
 
 set -e
@@ -28,5 +31,6 @@ fi
 
 eof
 
+chmod +x $SCRIPT
 sed -i '1i/scripts/local-premount/losetup_root_img "$@"\n[ -e /conf/param.conf ] && . /conf/param.conf' \
-	ramdisk/scripts/local-premount/ORDER
+	$RAMDISK/ORDER
