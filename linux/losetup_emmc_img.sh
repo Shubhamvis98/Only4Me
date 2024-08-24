@@ -26,15 +26,15 @@ for x in $(cat /proc/cmdline); do
 	esac
 done
 
-mkdir /userdata
-mount `blkid -t PARTLABEL=${IMGPART} -o device` /userdata || exit 0
+mkdir /${IMGPART}
+mount `blkid -t PARTLABEL=${IMGPART} -o device` /${IMGPART} || exit 0
 
 if [ -e "${ROOTIMG}" ]
 then
 	losetup -f ${ROOTIMG}
 else
-	umount /userdata
-	rmdir /userdata
+	umount /${IMGPART}
+	rmdir /${IMGPART}
 fi
 
 eof
