@@ -13,7 +13,7 @@ RUN apt-get update && \
     bison bc flex file \
     vim pkgconf cpio \
     debhelper-compat \
-    kmod libssl-dev \
+    kmod libssl-dev zstd \
     libelf-dev build-essential \
     crossbuild-essential-arm64 \
     libncurses-dev && \
