@@ -1,12 +1,3 @@
-#!/bin/bash
-
-RAMDISK=ramdisk/scripts/local-premount
-SCRIPT=${RAMDISK}/losetup_root_img
-
-
-[ ! -d "${RAMDISK}" ] && echo '[!] Ramdisk extract not found' && exit
-
-cat <<'eof'> ${SCRIPT}
 #!/bin/sh
 
 # This script runs during the init-premount phase and sets up a loop
@@ -53,23 +44,15 @@ else
 fi
 
 # Mount and losetup the image file
+LOOP=`losetup -f`
 mkdir -p ${MNTDIR}
-mount ${DEVICE} ${MNTDIR}
+mount -t `blkid ${DEVICE} -o value -s TYPE`  ${DEVICE} ${MNTDIR}
 
 if [ -f "${IMGPATH}" ]
 then
-	losetup -f ${IMGPATH}
+	[ -b "${LOOP}" ] || mknod ${LOOP} b 7 0
+	losetup ${LOOP} ${IMGPATH}
 else
 	umount ${MNTDIR}
 	rmdir ${MNTDIR}
 fi
-
-eof
-
-chmod 755 ${SCRIPT}
-if ! grep -q losetup_root_img ${RAMDISK}/ORDER
-then
-	sed -i '1i/scripts/local-premount/losetup_root_img "$@"\n[ -e /conf/param.conf ] && . /conf/param.conf' \
-		${RAMDISK}/ORDER
-fi
-
