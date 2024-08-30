@@ -21,23 +21,37 @@ for x in $(cat /proc/cmdline); do
 	case $x in
 		rootimg=*)
 			ROOTIMG=${x#rootimg=}
-			IMGPART=`echo ${ROOTIMG} | cut -d'/' -f2`
+			IMGPART=${ROOTIMG%%/*}
+			IMGPATH=${ROOTIMG#*=}
+			MNTDIR=${IMGPATH%%/*}
 			;;
 	esac
 done
 
-if [ -n "${IMGPART}" ]
-then
-	mkdir /${IMGPART}
-	mount `blkid -t PARTLABEL=${IMGPART} -o device` /${IMGPART} || exit 0
+# Exit if empty
+[ -z "${IMGPART}" ] && exit
 
-	if [ -f "${ROOTIMG}" ]
-	then
-		losetup -f ${ROOTIMG}
-	else
-		umount /${IMGPART}
-		rmdir /${IMGPART}
-	fi
+# Find block device
+if [ -b /dev/${IMGPART} ]
+then
+    DEVICE=/dev/${IMGPART}
+elif blkid -t ${IMGPART} -o device
+then
+    DEVICE=`blkid -t ${IMGPART} -o device`
+else
+	exit
+fi
+
+# Mount and losetup the image file
+mkdir -p ${MNTDIR}
+mount ${DEVICE} ${MNTDIR} || exit
+
+if [ -f "${IMGPATH}" ]
+then
+	losetup -f ${IMGPATH}
+else
+	umount ${MNTDIR}
+	rmdir ${MNTDIR}
 fi
 
 eof
