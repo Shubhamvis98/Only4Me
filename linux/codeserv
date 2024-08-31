@@ -1,0 +1,44 @@
+#!/bin/bash
+
+if ! which code-server > /dev/null
+then
+	curl -fsSL https://code-server.dev/install.sh | sudo sh
+fi
+
+mkdir -p ~/.config/code-server
+cat <<'eof'> ~/.config/code-server/config.yaml
+bind-addr: 127.0.0.1:9999
+auth: password
+password: xxxxxxxx
+cert: false
+eof
+
+LOG='code-server.log'
+
+case $1 in
+	s)
+		if fuser "${LOG}" > /dev/null 2>&1
+		then
+			echo '[+] Already Running...'
+		else
+			nohup code-server > "${LOG}" 2>&1 &
+			echo '[+] Server Started.'
+		fi
+		;;
+	x)
+		if fuser "${LOG}" > /dev/null 2>&1
+		then
+			pkill -f code-server
+			sleep 1
+			echo '[+] Server Stopped.'
+		else
+			echo '[+] Already Stopped.'
+		fi
+		;;
+	u)
+		cloudshell get-web-preview-url -p 9999
+		;;
+	*)
+		echo -e 'Usage:\n\ts\tStart Server\n\tx\tStop Server\n\tu\tGet Web Address'
+		;;
+esac
