@@ -19,7 +19,7 @@ RUN apt-get update && \
     libncurses-dev && \
     apt-get clean
 RUN echo 'echo -e "Kernel Builder by fossfrog\nTwitter: ShubhamVis98\nWeb: https://fossfrog.in\n"' >> /root/.bashrc
-RUN echo 'echo -e "Kernel Builder by fossfrog\nTwitter: ShubhamVis98\nWeb: https://fossfrog.in\n"' > /etc/motd
+RUN echo 'Kernel Builder by fossfrog\nTwitter: ShubhamVis98\nWeb: https://fossfrog.in\n' > /etc/motd
 
 CMD ["bash", "-l"]
 
