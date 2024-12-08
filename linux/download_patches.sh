@@ -7,7 +7,7 @@
 
 for i in $(seq 0 $((`jq 'length' out.json` - 1)))
 do
-FILENAME="$(printf "%04d" $((i + 1)))-$(jq -r "reverse | .[${i}].commit.message" out.json | head -n1 | sed 's#[ !:()/]#-#g').patch"
+FILENAME="$(printf "%04d" $((i + 1)))-$(jq -r "reverse | .[${i}].commit.message" out.json | head -n1 | sed 's#[ !:()/=]#-#g').patch"
 LINK="$(jq -r "reverse | .[${i}].html_url" out.json).patch"
 wget $LINK -O $FILENAME
 done
