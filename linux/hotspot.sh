@@ -8,7 +8,7 @@ fi
 OPT=$1
 DTIF=wlan0
 APIF=wlan0_ap
-APIF=ap0
+
 CHAN=$(iw dev "$DTIF" info | grep channel | awk '{print $2}')
 
 case $OPT in
