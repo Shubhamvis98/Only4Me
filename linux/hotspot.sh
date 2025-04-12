@@ -8,6 +8,7 @@ fi
 OPT=$1
 DTIF=wlan0
 APIF=wlan0_ap
+APIF=ap0
 CHAN=$(iw dev "$DTIF" info | grep channel | awk '{print $2}')
 
 case $OPT in
@@ -28,11 +29,12 @@ case $OPT in
 		echo '[+]Starting Hotspot...'
 		sed -i "s/interface=.*/interface=${APIF}/;s/channel=.*/channel=${CHAN}/" \
 			/etc/hostapd/hostapd.conf
+		sed -i "s/interface=.*/interface=${APIF}/" /etc/dnsmasq.conf
 		iw dev ${DTIF} interface add ${APIF} type __ap
 		ip addr add 192.168.50.1/24 dev ${APIF}
 		ip link set ${APIF} up
 		sysctl -w net.ipv4.ip_forward=1 > /dev/null
-		[ ! $(iptables -t nat -C POSTROUTING -o ${DTIF} -j MASQUERADE 2>/dev/null) ] && \
+		iptables -t nat -C POSTROUTING -o ${DTIF} -j MASQUERADE 2>/dev/null || \
 			iptables -t nat -A POSTROUTING -o ${DTIF} -j MASQUERADE
 		systemctl restart dnsmasq
 		systemctl restart hostapd
