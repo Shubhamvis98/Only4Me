@@ -5,6 +5,7 @@ FROM debian:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN dpkg --add-architecture arm64
 RUN apt-get update && \
     apt-get install -y \
     zip unzip python3 \
@@ -16,7 +17,7 @@ RUN apt-get update && \
     kmod libssl-dev zstd \
     libelf-dev build-essential \
     crossbuild-essential-arm64 \
-    libncurses-dev && \
+    libncurses-dev libssl-dev:arm64 && \
     apt-get clean
 RUN echo 'echo -e "Kernel Builder by fossfrog\nTwitter: ShubhamVis98\nWeb: https://fossfrog.in\n"' >> /root/.bashrc
 RUN echo 'Kernel Builder by fossfrog\nTwitter: ShubhamVis98\nWeb: https://fossfrog.in\n' > /etc/motd
