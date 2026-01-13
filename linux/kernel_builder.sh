@@ -12,11 +12,12 @@ RUN apt-get update && \
     python-is-python3 \
     curl wget git rsync \
     bison bc flex file \
-    vim pkgconf cpio \
-    debhelper-compat \
+    vim pkgconf cpio inotify-tools \
+    debhelper-compat mkbootimg \
     kmod libssl-dev zstd \
     libelf-dev build-essential \
     crossbuild-essential-arm64 \
+    device-tree-compiler tmux \
     libncurses-dev libssl-dev:arm64 && \
     apt-get clean
 RUN echo 'echo -e "Kernel Builder by fossfrog\nTwitter: ShubhamVis98\nWeb: https://fossfrog.in\n"' >> /root/.bashrc
