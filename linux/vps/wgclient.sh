@@ -36,6 +36,9 @@ AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = 25
 EOF
 	echo "[+] Peer config: $PEER_CONF_NAME"
+	if command -v qrencode >/dev/null 2>&1; then
+		qrencode -t ANSIUTF8 < $PEER_CONF_NAME
+	fi
 }
 
 remove_peer() {
@@ -77,7 +80,7 @@ WG_IF='wg0'
 WG_CONF=/etc/wireguard/${WG_IF}.conf
 WG_CLIENT_CONF=/etc/wireguard/peers
 WG_PORT=$(wg show ${WG_IF} listen-port)
-PUBLIC_IP=$(curl -s ifconfig.me)
+PUBLIC_IP=$(curl -s4 ifconfig.me)
 SERVER_PUB=$(wg show ${WG_IF} public-key)
 NETWORK_CIDR=$(grep Address /etc/wireguard/${WG_IF}.conf | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
 
